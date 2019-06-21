@@ -7,9 +7,9 @@ from django.conf import settings
 from social_core.utils import setting_name
 
 
-encrypt_existing_credentials_sql = '''
+encrypt_existing_credentials_sql = f'''
     update social_auth_usersocialauth
-    set extra_data = cast (pgp_sym_encrypt(nullif(extra_data::text, NULL)::text, '{}') as text)
+    set extra_data = pgp_sym_encrypt(%s, '{settings.SECRET_KEY}')
     where extra_data is not null
 '''
 
