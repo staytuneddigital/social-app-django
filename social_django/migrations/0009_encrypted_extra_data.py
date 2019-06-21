@@ -13,6 +13,13 @@ USER_MODEL = getattr(settings, setting_name('USER_MODEL'), None) or \
              'auth.User'
 
 
+encrypt_existing_credentials_sql = '''
+    update social_auth_usersocialauth
+    set extra_data = pgp_sym_encrypt(nullif(extra_data::text, NULL)::text, '{}')
+    where extra_data is not null
+'''
+
+
 class Migration(migrations.Migration):
     replaces = [
         ('default', '0009_encrypted_extra_data'),
@@ -28,5 +35,6 @@ class Migration(migrations.Migration):
             model_name='usersocialauth',
             name='extra_data',
             field=PGPEncryptedJSONAsTextField(default=''),
-        )
+        ),
+        migrations.RunSQL(encrypt_existing_credentials_sql),
     ]
