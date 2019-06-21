@@ -11,7 +11,7 @@ from .compat import get_rel_model
 from .storage import DjangoUserMixin, DjangoAssociationMixin, \
                      DjangoNonceMixin, DjangoCodeMixin, \
                      DjangoPartialMixin, BaseDjangoStorage
-from .fields import JSONField
+from .fields import JSONField, PGPEncryptedJSONAsTextField
 from .managers import UserSocialAuthManager
 
 
@@ -34,7 +34,7 @@ class AbstractUserSocialAuth(models.Model, DjangoUserMixin):
                              on_delete=models.CASCADE)
     provider = models.CharField(max_length=32)
     uid = models.CharField(max_length=UID_LENGTH)
-    extra_data = JSONField()
+    extra_data = PGPEncryptedJSONAsTextField()
     objects = UserSocialAuthManager()
 
     def __str__(self):
