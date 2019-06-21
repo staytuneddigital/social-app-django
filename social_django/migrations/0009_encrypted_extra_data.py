@@ -15,7 +15,7 @@ USER_MODEL = getattr(settings, setting_name('USER_MODEL'), None) or \
 
 encrypt_existing_credentials_sql = '''
     update social_auth_usersocialauth
-    set extra_data = pgp_sym_encrypt(nullif(extra_data::text, NULL)::text, '{}')
+    set extra_data = cast (pgp_sym_encrypt(nullif(extra_data::text, NULL)::text, '{}') as text)
     where extra_data is not null
 '''
 
