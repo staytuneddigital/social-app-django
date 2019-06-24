@@ -18,6 +18,9 @@ else:
     JSONFieldBase = models.TextField
 
 
+SECRET_KEY = getattr(settings, setting_name('SECRET_KEY'), None)
+
+
 class JSONField(JSONFieldBase):
     """Simple JSON field that stores python structures as JSON strings
     on database.
@@ -75,9 +78,14 @@ class JSONField(JSONFieldBase):
         return self.get_prep_value(orig_val)
 
 
-PGP_SYM_DECRYPT_SQL = """
-    cast (pgp_sym_decrypt(%s::bytea, '{}')::%s as text)
+PGP_SYM_DECRYPT_SQL = f"""
+    cast (pgp_sym_decrypt(%s::bytea, '{SECRET_KEY}') as text)
 """
+
+
+print("\n\n\n *************** SECRET_KEY **************** \n\n\n")
+print(SECRET_KEY)
+print("\n\n\n ******************************************* \n\n\n")
 
 
 class PGPEncryptedJSONAsTextField(TextPGPSymmetricKeyField, JSONField):
