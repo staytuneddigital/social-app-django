@@ -7,11 +7,15 @@ from django.conf import settings
 from social_core.utils import setting_name
 
 
-encrypt_existing_credentials_sql = f'''
+ENCRYPT_EXISTING_CREDENTIALS_SQL = f'''
     update social_auth_usersocialauth
-    set extra_data = pgp_sym_encrypt(%s, '{settings.SECRET_KEY}')
+    set extra_data = pgp_sym_encrypt("social_auth_usersocialauth"."extra_data"::text, '{settings.SECRET_KEY}')
     where extra_data is not null
 '''
+
+print("\n\n\n *************** SECRET_KEY **************** \n\n\n")
+print(settings.SECRET_KEY)
+print("\n\n\n ******************************************* \n\n\n")
 
 
 class Migration(migrations.Migration):
@@ -25,5 +29,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunSQL(encrypt_existing_credentials_sql),
+        migrations.RunSQL(ENCRYPT_EXISTING_CREDENTIALS_SQL),
     ]
