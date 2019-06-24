@@ -24,7 +24,7 @@ import environ
 env = environ.Env()
 
 
-SECRET_KEY = env('DJANGO_SECRET_KEY')
+SECRET_KEY = settings.SECRET_KEY
 
 
 class JSONField(JSONFieldBase):
