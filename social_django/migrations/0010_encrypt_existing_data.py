@@ -9,13 +9,9 @@ from social_core.utils import setting_name
 
 ENCRYPT_EXISTING_CREDENTIALS_SQL = f'''
     update social_auth_usersocialauth
-    set extra_data = pgp_sym_encrypt("social_auth_usersocialauth"."extra_data"::text, '{settings.SECRET_KEY}')
+    set extra_data = cast(pgp_sym_encrypt("social_auth_usersocialauth"."extra_data"::text, '{settings.SECRET_KEY}')::text as text)
     where extra_data is not null
 '''
-
-print("\n\n\n *************** SECRET_KEY **************** \n\n\n")
-print(settings.SECRET_KEY)
-print("\n\n\n ******************************************* \n\n\n")
 
 
 class Migration(migrations.Migration):
