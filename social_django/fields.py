@@ -18,7 +18,13 @@ else:
     JSONFieldBase = models.TextField
 
 
-SECRET_KEY = getattr(settings, setting_name('SECRET_KEY'), None)
+import environ
+
+# Read settings from the environment.
+env = environ.Env()
+
+
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 
 class JSONField(JSONFieldBase):
